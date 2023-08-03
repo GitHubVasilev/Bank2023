@@ -17,16 +17,17 @@ namespace Bank.Application.Customers.Validations
 
         public ValidationResult<CustomerPutUpdateViewModel> Validate(CustomerPutUpdateViewModel model, ClaimsPrincipal user)
         {
+            ValidationResult<CustomerPutUpdateViewModel> validationResult = ValidateResultFactory.CreateValidationResult(model);
             foreach (var rule in _validationRules)
             {
                 ValidationResult<CustomerPutUpdateViewModel> result = rule.Validate(model, user);
                 if (!result.IsValid) 
                 {
-                    return result;
+                    validationResult.Description.AddRange(result.Description);
                 }
             }
 
-            return ValidateResultFactory.CreateValidationResult(model, true, "");
+            return validationResult;
         }
     }
 }

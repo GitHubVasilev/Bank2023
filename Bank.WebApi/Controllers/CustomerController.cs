@@ -24,12 +24,13 @@ namespace Bank.WebApi.Controllers
         }
 
         [HttpPost("[action]")]
-        public async Task<ActionResult<WrapperResult>> Create([FromBody] CustomerPostCreateViewModel viewModel) 
+        public async Task<ActionResult<WrapperResult>> Create([FromBody] CustomerPostCreateViewModel viewModel)
         {
             return Ok(await Mediator.Send(new CreateCustomerCommand(viewModel, ControllerContext.HttpContext.User), ControllerContext.HttpContext.RequestAborted));
         }
 
-        public async Task<ActionResult> Update([FromBody] CustomerPutUpdateViewModel viewModel) 
+        [HttpPut("[action]")]
+        public async Task<ActionResult<WrapperResult>> Update([FromBody] CustomerPutUpdateViewModel viewModel) 
         {
             UpdateCustomerCommand command = new UpdateCustomerCommand(viewModel, ControllerContext.HttpContext.User);
             await Mediator.Send(command, ControllerContext.HttpContext.RequestAborted);

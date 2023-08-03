@@ -3,9 +3,9 @@
     public class ValidationResult<T>
         where T : class
     {
-        public bool IsValid { get; set; }
+        public bool IsValid  => Description!.Count() > 0;
 
-        public string? Description { get; set; }
+        public List<string> Description { get; set; } = new List<string>();
 
         public T Model { get; set; } = null!;
     }
