@@ -6,7 +6,7 @@ namespace Bank.Application.Interfaces.Accounts
     {
         public void AddManager(IPutAndWithdrawManager manager);
 
-        public Task<PutAndWithdrawServiceModel> PutAsync(PutAndWithdrawServiceModel serviceModel, CancellationToken cancellationToken);
-        public Task<PutAndWithdrawServiceModel> WithdrawAsync(PutAndWithdrawServiceModel serviceModel, CancellationToken cancellationToken);
+        public Task<PutAndWithdrawServiceModel> PutAsync(PutAndWithdrawServiceModel serviceModel, decimal sum, CancellationToken cancellationToken);
+        public Task<PutAndWithdrawServiceModel> WithdrawAsync(PutAndWithdrawServiceModel serviceModel, decimal sum, CancellationToken cancellationToken);
     }
 }
