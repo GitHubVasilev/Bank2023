@@ -16,7 +16,7 @@
         /// <summary>
         /// Идентификатор клиента которому принадлежит счет
         /// </summary>
-        public Guid UIDClient { get; init; }
+        public Guid ClientId { get; init; }
         /// <summary>
         /// Дата открытия счета
         /// </summary>
@@ -24,7 +24,11 @@
         /// <summary>
         /// Идентификатор типа аккаутна
         /// </summary>
-        public Guid TypeAccountId { get; set; }
+        public Guid TypeAccountId { get; init; }
+        /// <summary>
+        /// Название типа аккаунта
+        /// </summary>
+        public string? TypeAccountName { get; init; }
         /// <summary>
         /// Количество валютной единицы
         /// </summary>

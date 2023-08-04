@@ -1,13 +1,17 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
+using Bank.Application.Accounts.ViewModels.Accounts;
+using Bank.Application.Common;
 using Bank.Application.Interfaces;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 namespace Bank.Application.Accounts.Queries.GetAccountList
 {
-    public class GetAccountListQueryHeandler
-        : IRequestHandler<GetAccountListQuery, AccountListViewModel>
+    public record GetAccountListQuery<T>(Guid ClientId) : IRequest<WrapperResult<IEnumerable<T>>>;
+
+    public class GetAccountListQueryHeandler<T>
+        : IRequestHandler<GetAccountListQuery<T>, WrapperResult<IEnumerable<T>>>
     {
         private readonly IApplicationDbContext _context;
         private readonly IMapper _mapper;
@@ -19,13 +23,15 @@ namespace Bank.Application.Accounts.Queries.GetAccountList
             _mapper = mapper;
         }
 
-        public async Task<AccountListViewModel> Handle(GetAccountListQuery request, CancellationToken cancellationToken)
+        public async Task<WrapperResult<IEnumerable<T>>> Handle(GetAccountListQuery<T> request, CancellationToken cancellationToken)
         {
-            List<AccountLookupDTO>  list = await _context.Accounts
+            WrapperResult<IEnumerable<T>> wrapperResult = WrapperResult.Build<IEnumerable<T>>();
+            List<T> list = await _context.Accounts
                 .Where(m => m.ClientId == request.ClientId)
-                .ProjectTo<AccountLookupDTO>(_mapper.ConfigurationProvider)
+                .ProjectTo<T>(_mapper.ConfigurationProvider)
                 .ToListAsync(cancellationToken);
-            return new AccountListViewModel() { DepositeAccounts = list };
+            wrapperResult.Result = list;
+            return wrapperResult;
         }
     }
 }

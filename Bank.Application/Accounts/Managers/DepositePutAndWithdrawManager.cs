@@ -1,4 +1,5 @@
-﻿using Bank.Application.Interfaces.Accounts;
+﻿using Bank.Application.Accounts.Services.ServiceModels;
+using Bank.Application.Interfaces.Accounts;
 using Bank.Domain;
 using Bank.Domain.Base;
 
@@ -8,35 +9,35 @@ namespace Bank.Application.Accounts.Managers
     {
         public IPutAndWithdrawManager? NextManager { get; set; }
 
-        public Account Put(Account model, decimal sum)
+        public PutAndWithdrawServiceModel Put(PutAndWithdrawServiceModel serviceModel, decimal sum)
         {
-            if (model.TypeAccount.Name == AppData.DepositeAccountTypeName) 
+            if (serviceModel.TypeAccount == AppData.DepositeAccountTypeName) 
             {
-                sum *= 1 + model.Procent / 100;
-                model.CountMonetaryUnit += sum;
+                sum *= 1 + serviceModel.Procent / 100;
+                serviceModel.StartSum += sum;
             }
             else if (NextManager is not null) 
             {
-                model = NextManager.Put(model, sum);
+                serviceModel = NextManager.Put(serviceModel, sum);
             }
-            return model;
+            return serviceModel;
         }
 
-        public Account Withdraw(Account model, decimal sum)
+        public PutAndWithdrawServiceModel Withdraw(PutAndWithdrawServiceModel serviceModel, decimal sum)
         {
-            if (model.TypeAccount.Name == AppData.DepositeAccountTypeName)
+            if (serviceModel.TypeAccount == AppData.DepositeAccountTypeName)
             {
-                if (model.CountMonetaryUnit > 0)
+                if (serviceModel.StartSum > 0)
                 {
-                    sum *= 1 + model.Procent / 100;
+                    sum *= 1 + serviceModel.Procent / 100;
                 }
-                model.CountMonetaryUnit -= sum;
+                serviceModel.StartSum -= sum;
             }
             else if (NextManager is not null) 
             {
-                model = NextManager.Withdraw(model, sum);
+                serviceModel = NextManager.Withdraw(serviceModel, sum);
             }
-            return model;
+            return serviceModel;
         }
     }
 }

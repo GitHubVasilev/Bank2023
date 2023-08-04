@@ -1,4 +1,5 @@
-﻿using Bank.Application.Common.Exceptions;
+﻿using Bank.Application.Common;
+using Bank.Application.Common.Exceptions;
 using Bank.Application.Interfaces;
 using Bank.Domain;
 using MediatR;
@@ -6,8 +7,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Bank.Application.Customers.Commands.DeleteCustomer
 {
-    public record DeleteCustomerCommand(Guid Id) : IRequest;
-    public class DeleteCustomerCommandHeandler : IRequestHandler<DeleteCustomerCommand>
+    public record DeleteCustomerCommand(Guid Id) : IRequest<WrapperResult>;
+    public class DeleteCustomerCommandHeandler : IRequestHandler<DeleteCustomerCommand, WrapperResult>
     {
         private readonly IApplicationDbContext _context;
 
@@ -16,12 +17,17 @@ namespace Bank.Application.Customers.Commands.DeleteCustomer
             _context = dbContext;
         }
 
-        public async Task Handle(DeleteCustomerCommand request, CancellationToken cancellationToken)
+        public async Task<WrapperResult> Handle(DeleteCustomerCommand request, CancellationToken cancellationToken)
         {
-            Customer model = await _context.Customers.FirstOrDefaultAsync(m => m.UID == request.Id) 
-                ?? throw new NotFoundException(nameof(Customer), request.Id);
+            Customer? model = await _context.Customers.FirstOrDefaultAsync(m => m.UID == request.Id);
+
+            if (model is null) 
+            {
+                return WrapperResult.Build(1, ReferencesTextResponse.CustometNotFound, new NotFoundException(nameof(Customer), request.Id));
+            }
 
             _context.Customers.Remove(model);
+            return WrapperResult.Build(0);
         }
     }
 }

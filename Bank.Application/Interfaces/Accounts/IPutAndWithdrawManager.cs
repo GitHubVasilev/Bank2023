@@ -1,4 +1,5 @@
-﻿using Bank.Domain;
+﻿using Bank.Application.Accounts.Services.ServiceModels;
+using Bank.Domain;
 
 namespace Bank.Application.Interfaces.Accounts
 {
@@ -17,12 +18,12 @@ namespace Bank.Application.Interfaces.Accounts
         /// </summary>
         /// <param name="model">Счет для пополения</param>
         /// <param name="sum">Сумма пополнения</param>
-        Account Put(Account model, decimal sum);
+        PutAndWithdrawServiceModel Put(PutAndWithdrawServiceModel model, decimal sum);
         /// <summary>
         /// Снимает средства со счета
         /// </summary>
         /// <param name="model">Счет для снятия</param>
         /// <param name="sum">Сумма снятия</param>
-        Account Withdraw(Account model, decimal sum);
+        PutAndWithdrawServiceModel Withdraw(PutAndWithdrawServiceModel model, decimal sum);
     }
 }

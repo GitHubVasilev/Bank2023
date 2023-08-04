@@ -1,4 +1,4 @@
-﻿using Bank.Application.Accounts.ViewModels;
+﻿using Bank.Application.Accounts.ViewModels.NoDepositeAccounts;
 using Bank.Application.Interfaces.Accounts;
 using MediatR;
 

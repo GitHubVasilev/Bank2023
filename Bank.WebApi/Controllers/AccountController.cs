@@ -2,7 +2,9 @@
 using Bank.Application.Accounts.Commands.DeleteCommand;
 using Bank.Application.Accounts.Queries.GetAccountDetales;
 using Bank.Application.Accounts.Queries.GetAccountList;
-using Bank.Application.Accounts.ViewModels;
+using Bank.Application.Accounts.ViewModels.Accounts;
+using Bank.Application.Accounts.ViewModels.DepositeAccounts;
+using Bank.Application.Accounts.ViewModels.NoDepositeAccounts;
 using Bank.WebApi.Controllers.Base;
 using Microsoft.AspNetCore.Mvc;
 
@@ -14,27 +16,16 @@ namespace Bank.WebApi.Controllers
     {
         public AccountController() { }
 
-        [HttpGet("[action]")]
-        public async Task<ActionResult> Pink()
-        {
-            await Task.Delay(0);
-            return Ok();
-        }
-
         [HttpGet("[action]/{clientId}")]
-        public async Task<ActionResult<AccountListViewModel>> GetFromUser(Guid clientId)
+        public async Task<ActionResult<List<AccountLookupDTO>>> GetFromUser(Guid clientId)
         {
-            GetAccountListQuery query = new GetAccountListQuery() { ClientId = clientId };
-            var vm = await Mediator.Send(query);
-            return Ok(vm);
+            return Ok(await Mediator.Send(new GetAccountListQuery<AccountLookupDTO>(clientId), ControllerContext.HttpContext.RequestAborted));
         }
 
         [HttpGet("[action]/{accountId}")]
         public async Task<ActionResult<AccountDetailsViewModel>> Get(Guid accountId)
         {
-            GetAccountDetailsQuery query = new GetAccountDetailsQuery() { UID = accountId };
-            var vm = await Mediator.Send(query);
-            return Ok(vm);
+            return Ok(await Mediator.Send(new GetAccountDetailsQuery<AccountDetailsViewModel>(accountId), ControllerContext.HttpContext.RequestAborted));
         }
 
         [HttpPost("[action]")]

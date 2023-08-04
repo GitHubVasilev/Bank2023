@@ -3,7 +3,7 @@ using Bank.Application.Accounts.ViewModels.Base;
 using Bank.Application.Common.Mappings;
 using Bank.Domain;
 
-namespace Bank.Application.Accounts.ViewModels
+namespace Bank.Application.Accounts.ViewModels.DepositeAccounts
 {
     /// <summary>
     /// Объект для передачи данных депозитного счета
@@ -20,7 +20,7 @@ namespace Bank.Application.Accounts.ViewModels
             profile.CreateMap<Account, DepositeAccountViewModel>()
                 .ForMember(m => m.UID, opt => opt.MapFrom(acc => acc.UID))
                 .ForMember(m => m.Name, opt => opt.MapFrom(acc => acc.Name))
-                .ForMember(m => m.UIDClient, opt => opt.MapFrom(acc => acc.ClientId))
+                .ForMember(m => m.ClientId, opt => opt.MapFrom(acc => acc.ClientId))
                 .ForMember(m => m.TypeAccountId, opt => opt.MapFrom(acc => acc.TypeAccountId))
                 .ForMember(m => m.DateOpen, opt => opt.MapFrom(acc => acc.DateOpen))
                 .ForMember(m => m.CountMonetaryUnit, opt => opt.MapFrom(acc => acc.CountMonetaryUnit))
