@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
-using Bank.Application.Accounts.ViewModels.Accounts;
 using Bank.Application.Common;
 using Bank.Application.Interfaces;
 using MediatR;

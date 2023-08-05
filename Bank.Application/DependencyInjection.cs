@@ -21,8 +21,6 @@ namespace Bank.Application
         public static IServiceCollection AddApplication(this IServiceCollection services) 
         {
             services.AddMediatR(m => m.RegisterServicesFromAssemblies(Assembly.GetExecutingAssembly()));
-            services.AddScoped<IAccountHeandler<DepositeAccountPostViewModel>, AccountService<DepositeAccountPostViewModel>>();
-            services.AddScoped<IAccountHeandler<NoDepositeAccountPostViewModel>, AccountService<NoDepositeAccountPostViewModel>>();
             services.AddScoped<IValidationRules<CustomerPutUpdateViewModel>, FirstNameCustomerValidationRules>();
             services.AddScoped<IValidationRules<CustomerPutUpdateViewModel>, LastNameCustomerValidationRules>();
             services.AddScoped<IValidationRules<CustomerPutUpdateViewModel>, PatronymicCustomerValidationRules>();
@@ -35,7 +33,7 @@ namespace Bank.Application
             services.AddSingleton<IPutAndWithdrawService, PutAndWithdrawService>(
                 m => 
                 {
-                    PutAndWithdrawService service = new(m.GetService<IApplicationDbContext>());
+                    PutAndWithdrawService service = new();
                     service.AddManager(new DepositePutAndWithdrawManager());
                     service.AddManager(new NoDepositePutAndWithdrawManager());
                     return service;

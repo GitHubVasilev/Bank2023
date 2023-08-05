@@ -1,6 +1,8 @@
-﻿using Bank.Application.Accounts.ViewModels.DepositeAccounts;
+﻿using AutoMapper;
+using Bank.Application.Accounts.ViewModels.DepositeAccounts;
 using Bank.Application.Common;
-using Bank.Application.Interfaces.Accounts;
+using Bank.Application.Interfaces;
+using Bank.Domain;
 using MediatR;
 
 namespace Bank.Application.Accounts.Commands.CreateAccount
@@ -9,16 +11,20 @@ namespace Bank.Application.Accounts.Commands.CreateAccount
 
     public class CreateDepositeAccountCommandHeandler : IRequestHandler<CreateDepositeAccountCommand, WrapperResult>
     {
-        IAccountHeandler<DepositeAccountPostViewModel> _context;
+        private readonly IApplicationDbContext _context;
+        private readonly IMapper _mapper;
 
-        public CreateDepositeAccountCommandHeandler(IAccountHeandler<DepositeAccountPostViewModel> service)
+        public CreateDepositeAccountCommandHeandler(IApplicationDbContext dbContext, IMapper mapper)
         {
-            _context = service;
+            _context = dbContext;
+            _mapper = mapper;
         }
 
         public async Task<WrapperResult> Handle(CreateDepositeAccountCommand request, CancellationToken cancellationToken)
         {
-            await _context.CreateAccountAsync(request.viewModel, cancellationToken);
+            Account model = _mapper.Map<DepositeAccountPostViewModel, Account>(request.viewModel);
+            await _context.Accounts.AddAsync(model, cancellationToken);
+            return WrapperResult.Build(0);
         }
     }
 }

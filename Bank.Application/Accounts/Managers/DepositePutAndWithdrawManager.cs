@@ -1,6 +1,5 @@
 ﻿using Bank.Application.Accounts.Services.ServiceModels;
 using Bank.Application.Interfaces.Accounts;
-using Bank.Domain;
 using Bank.Domain.Base;
 
 namespace Bank.Application.Accounts.Managers

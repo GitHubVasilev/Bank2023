@@ -1,4 +1,5 @@
-﻿using Bank.Application.Common.Exceptions;
+﻿using Bank.Application.Accounts.Services.ServiceModels;
+using Bank.Application.Common.Exceptions;
 using Bank.Application.Interfaces;
 using Bank.Application.Interfaces.Accounts;
 using Bank.Domain;
@@ -12,9 +13,9 @@ namespace Bank.Application.Accounts.Services
         private IPutAndWithdrawManager? _currentManegment;
         private readonly IApplicationDbContext _context;
 
-        public PutAndWithdrawService(IApplicationDbContext dbContext)
+        public PutAndWithdrawService()
         {
-            _context = dbContext;
+
         }
 
         public void AddManager(IPutAndWithdrawManager manager)
@@ -28,25 +29,24 @@ namespace Bank.Application.Accounts.Services
             _currentManegment = _currentManegment.NextManager;
         }
 
-        public async Task PutAsync(Guid accountId, decimal sum, CancellationToken cancellationToken)
+        public async Task<PutAndWithdrawServiceModel> PutAsync(PutAndWithdrawServiceModel serviceModel, decimal sum, CancellationToken cancellationToken)
         {
-            Account? model = await _context.Accounts.FirstOrDefaultAsync(m => m.UID == accountId, cancellationToken)
-                ?? throw new NotFoundException(nameof(Account), accountId);
-            model = _startManagment?.Put(model, sum);
-
-            _context.Accounts.Update(model);
-            await _context.SaveChangesAsync(cancellationToken);
+            PutAndWithdrawServiceModel? resultPut = _startManagment?.Put
+                (
+                    serviceModel,
+                    sum
+                );
+            return resultPut is null ? throw new ManagersNotFoundException(nameof(PutAndWithdrawService)) : resultPut;
         }
 
-        public async Task WithdrawAsync(Guid accountId, decimal sum, CancellationToken cancellationToken)
+        public async Task<PutAndWithdrawServiceModel> WithdrawAsync(PutAndWithdrawServiceModel serviceModel, decimal sum, CancellationToken cancellationToken)
         {
-            Account? model = await _context.Accounts.FirstOrDefaultAsync(m => m.UID == accountId, cancellationToken)
-                ?? throw new NotFoundException(nameof(Account), accountId);
-
-            model = _startManagment?.Withdraw(model, sum);
-
-            _context.Accounts.Update(model);
-            await _context.SaveChangesAsync(cancellationToken);
+            PutAndWithdrawServiceModel? resultPut = _startManagment?.Withdraw
+                (
+                    serviceModel,
+                    sum
+                );
+            return resultPut is null ? throw new ManagersNotFoundException(nameof(PutAndWithdrawService)) : resultPut;
         }
     }
 }

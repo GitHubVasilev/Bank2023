@@ -7,6 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Accounts\Factories\**" />
+    <EmbeddedResource Remove="Accounts\Factories\**" />
+    <None Remove="Accounts\Factories\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="AutoMapper" Version="12.0.1" />
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
     <PackageReference Include="MediatR" Version="12.0.1" />
@@ -16,10 +22,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Bank.Domain\Bank.Domain.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Accounts\Factories\" />
   </ItemGroup>
 
 </Project>
