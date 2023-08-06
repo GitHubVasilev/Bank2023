@@ -11,7 +11,7 @@ namespace Persistence
 
         public DbSet<Customer> Customers { get; set; }
 
-        public DbSet<Customer> TypesAccount { get; set; }
+        public DbSet<TypeAccount> TypesAccount { get; set; }
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {

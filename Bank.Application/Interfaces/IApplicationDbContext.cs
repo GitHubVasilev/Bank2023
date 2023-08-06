@@ -7,7 +7,7 @@ namespace Bank.Application.Interfaces
     {
         DbSet<Account> Accounts { get; }
         DbSet<Customer> Customers { get; }
-        DbSet<Customer> TypesAccount { get; }
+        DbSet<TypeAccount> TypesAccount { get; }
 
         Task<int> SaveChangesAsync(CancellationToken token);
     }

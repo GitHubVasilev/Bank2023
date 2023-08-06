@@ -1,13 +1,15 @@
 ﻿using AutoMapper;
+using Bank.Application.Common;
 using Bank.Application.Interfaces;
 using Bank.Application.TypesAccount.ViewModels;
 using MediatR;
+using System.Collections.Generic;
 
 namespace Bank.Application.TypesAccount.Queries.TypeAccountList
 {
-    public record TypeAccountListQuery() : IRequest<IEnumerable<TypeAccountGetViewModel>>;
+    public record TypeAccountListQuery() : IRequest<WrapperResult<IEnumerable<TypeAccountGetViewModel>>>;
 
-    public class TypeAccountListHeandler : IRequestHandler<TypeAccountListQuery, IEnumerable<TypeAccountGetViewModel>>
+    public class TypeAccountListHeandler : IRequestHandler<TypeAccountListQuery, WrapperResult<IEnumerable<TypeAccountGetViewModel>>>
     {
         private readonly IApplicationDbContext _context;
         private readonly IMapper _mapper;
@@ -18,10 +20,12 @@ namespace Bank.Application.TypesAccount.Queries.TypeAccountList
             _mapper = mapper;
         }
 
-        public async Task<IEnumerable<TypeAccountGetViewModel>> Handle(TypeAccountListQuery request, CancellationToken cancellationToken)
+        public async Task<WrapperResult<IEnumerable<TypeAccountGetViewModel>>> Handle(TypeAccountListQuery request, CancellationToken cancellationToken)
         {
+            WrapperResult<IEnumerable<TypeAccountGetViewModel>> wrapperResult = WrapperResult.Build<IEnumerable<TypeAccountGetViewModel>>();
             await Task.Delay(0, cancellationToken);
-            return _mapper.Map<IEnumerable<TypeAccountGetViewModel>>(_context.TypesAccount);
+            wrapperResult.Result = _mapper.Map<IEnumerable<TypeAccountGetViewModel>>(_context.TypesAccount);
+            return wrapperResult;
         }
     }
 }
