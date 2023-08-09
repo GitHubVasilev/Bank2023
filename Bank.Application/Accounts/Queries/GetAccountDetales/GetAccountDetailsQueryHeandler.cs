@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Bank.Application.Accounts.ViewModels.Accounts;
 using Bank.Application.Common;
 using Bank.Application.Common.Exceptions;
 using Bank.Application.Interfaces;
@@ -8,9 +9,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Bank.Application.Accounts.Queries.GetAccountDetales
 {
-    public record GetAccountDetailsQuery<T>(Guid UID) : IRequest<WrapperResult<T>>;
+    public record GetAccountDetailsQuery(Guid UID) : IRequest<WrapperResult<AccountDetailsViewModel>>;
 
-    public class GetAccountDetailsQueryHeandler<T> : IRequestHandler<GetAccountDetailsQuery<T>, WrapperResult<T>>
+    public class GetAccountDetailsQueryHeandler : IRequestHandler<GetAccountDetailsQuery, WrapperResult<AccountDetailsViewModel>>
     {
         private readonly IMapper _mapper;
         private readonly IApplicationDbContext _context;
@@ -22,9 +23,9 @@ namespace Bank.Application.Accounts.Queries.GetAccountDetales
             _mapper = mapper;
         }
 
-        public async Task<WrapperResult<T>> Handle(GetAccountDetailsQuery<T> request, CancellationToken cancellationToken)
+        public async Task<WrapperResult<AccountDetailsViewModel>> Handle(GetAccountDetailsQuery request, CancellationToken cancellationToken)
         {
-            WrapperResult<T> wrapperResult = WrapperResult.Build<T>();
+            WrapperResult<AccountDetailsViewModel> wrapperResult = WrapperResult.Build<AccountDetailsViewModel>();
             Account? model = await _context.Accounts.FirstOrDefaultAsync(m => m.UID == request.UID, cancellationToken);
 
             if (model == null)
@@ -34,7 +35,7 @@ namespace Bank.Application.Accounts.Queries.GetAccountDetales
                 return wrapperResult;
             }
 
-            wrapperResult.Result = _mapper.Map<T>(model);
+            wrapperResult.Result = _mapper.Map<AccountDetailsViewModel>(model);
             return wrapperResult;
         }
     }

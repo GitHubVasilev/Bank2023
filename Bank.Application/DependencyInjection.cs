@@ -1,8 +1,5 @@
-﻿using Bank.Application.Accounts.Managers;
-using Bank.Application.Accounts.Services;
-using Bank.Application.Accounts.ViewModels;
-using Bank.Application.Accounts.ViewModels.DepositeAccounts;
-using Bank.Application.Accounts.ViewModels.NoDepositeAccounts;
+﻿using Bank.Application.Common.Services;
+using Bank.Application.Common.Services.Managers;
 using Bank.Application.Customers.Factories;
 using Bank.Application.Customers.Validations;
 using Bank.Application.Customers.Validations.RulesValidation;

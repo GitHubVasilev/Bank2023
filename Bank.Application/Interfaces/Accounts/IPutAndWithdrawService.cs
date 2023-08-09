@@ -1,4 +1,4 @@
-﻿using Bank.Application.Accounts.Services.ServiceModels;
+﻿using Bank.Application.Common.Services.ServiceModels;
 
 namespace Bank.Application.Interfaces.Accounts
 {

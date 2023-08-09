@@ -5,6 +5,7 @@ using Bank.Application.Accounts.Queries.GetAccountList;
 using Bank.Application.Accounts.ViewModels.Accounts;
 using Bank.Application.Accounts.ViewModels.DepositeAccounts;
 using Bank.Application.Accounts.ViewModels.NoDepositeAccounts;
+using Bank.Application.Common;
 using Bank.WebApi.Controllers.Base;
 using Microsoft.AspNetCore.Mvc;
 
@@ -17,39 +18,33 @@ namespace Bank.WebApi.Controllers
         public AccountController() { }
 
         [HttpGet("[action]/{clientId}")]
-        public async Task<ActionResult<List<AccountLookupDTO>>> GetFromUser(Guid clientId)
+        public async Task<ActionResult<WrapperResult<List<AccountLookupDTO>>>> GetFromUser(Guid clientId)
         {
-            return Ok(await Mediator.Send(new GetAccountListQuery<AccountLookupDTO>(clientId), ControllerContext.HttpContext.RequestAborted));
+            return Ok(await Mediator.Send(new GetAccountListQuery(clientId), ControllerContext.HttpContext.RequestAborted));
         }
 
         [HttpGet("[action]/{accountId}")]
-        public async Task<ActionResult<AccountDetailsViewModel>> Get(Guid accountId)
+        public async Task<ActionResult<WrapperResult<AccountDetailsViewModel>>> Get(Guid accountId)
         {
-            return Ok(await Mediator.Send(new GetAccountDetailsQuery<AccountDetailsViewModel>(accountId), ControllerContext.HttpContext.RequestAborted));
+            return Ok(await Mediator.Send(new GetAccountDetailsQuery(accountId), ControllerContext.HttpContext.RequestAborted));
         }
 
         [HttpPost("[action]")]
-        public async Task<ActionResult> CreateDeposite([FromBody] DepositeAccountPostViewModel viewModel)
+        public async Task<ActionResult<WrapperResult>> CreateDeposite([FromBody] DepositeAccountPostViewModel viewModel)
         {
-            var command = new CreateDepositeAccountCommand(viewModel);
-            await Mediator.Send(command);
-            return Ok();
+            return Ok(await Mediator.Send(new CreateDepositeAccountCommand(viewModel), ControllerContext.HttpContext.RequestAborted));
         }
 
         [HttpPost("[action]")]
-        public async Task<ActionResult> CreateNoDeposite([FromBody] NoDepositeAccountPostViewModel viewModel)
+        public async Task<ActionResult<WrapperResult>> CreateNoDeposite([FromBody] NoDepositeAccountPostViewModel viewModel)
         {
-            var command = new CreateNoDepositeAccountCommand(viewModel);
-            await Mediator.Send(command);
-            return Ok();
+            return Ok(await Mediator.Send(new CreateNoDepositeAccountCommand(viewModel), ControllerContext.HttpContext.RequestAborted));
         }
 
         [HttpDelete("[action]/{accountId}")]
-        public async Task<ActionResult> CloseAccount(Guid accountId) 
+        public async Task<ActionResult<WrapperResult>> CloseAccount(Guid accountId) 
         {
-            var command = new CloseAccountCommand(accountId);
-            await Mediator.Send(command);
-            return Ok();
+            return Ok(await Mediator.Send(new CloseAccountCommand(accountId), ControllerContext.HttpContext.RequestAborted));
         }
     }
 }
