@@ -1,4 +1,4 @@
-﻿namespace Bank.Application.Accounts.Services.ServiceModels
+﻿namespace Bank.Application.Common.Services.ServiceModels
 {
     public class PutAndWithdrawServiceModel
     {
@@ -6,7 +6,7 @@
         public decimal StartSum { get; set; }
         public int Procent { get; set; }
 
-        public static PutAndWithdrawServiceModel Build(string typeAccount, decimal startSum, int percent) 
+        public static PutAndWithdrawServiceModel Build(string typeAccount, decimal startSum, int percent)
         {
             return new PutAndWithdrawServiceModel { TypeAccount = typeAccount, StartSum = startSum, Procent = percent };
         }

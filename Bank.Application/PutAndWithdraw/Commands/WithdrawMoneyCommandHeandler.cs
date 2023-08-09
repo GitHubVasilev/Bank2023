@@ -1,40 +1,41 @@
-﻿using Bank.Application.Accounts.Services.ServiceModels;
-using Bank.Application.Common.Exceptions;
+﻿using Bank.Application.Common.Exceptions;
 using Bank.Application.Common;
 using Bank.Application.Interfaces.Accounts;
 using Bank.Domain;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Bank.Application.Interfaces;
+using Bank.Application.Common.Services.ServiceModels;
+using Bank.Application.PutAndWithdraw.ViewModels;
 
-namespace Bank.Application.Accounts.Commands.PutAndWithdraw
+namespace Bank.Application.PutAndWithdraw.Commands
 {
-    public record WithdrawDepositeAccountCommand(Guid UID, decimal Sum) : IRequest<WrapperResult>;
+    public record WithdrawMoneyCommand(PutAndWithdrawViewModel DataWithdraw) : IRequest<WrapperResult>;
 
-    public class WithdrawDepositeAccountCommandHeandler : IRequestHandler<WithdrawDepositeAccountCommand, WrapperResult>
+    public class WithdrawMoneyCommandHeandler : IRequestHandler<WithdrawMoneyCommand, WrapperResult>
     {
         private readonly IPutAndWithdrawService _putAndWithdrawService;
         private readonly IApplicationDbContext _context;
 
-        public WithdrawDepositeAccountCommandHeandler(IPutAndWithdrawService putAndWithdrawService, IApplicationDbContext dbContext)
+        public WithdrawMoneyCommandHeandler(IPutAndWithdrawService putAndWithdrawService, IApplicationDbContext dbContext)
         {
             _putAndWithdrawService = putAndWithdrawService;
             _context = dbContext;
         }
 
-        public async Task<WrapperResult> Handle(WithdrawDepositeAccountCommand request, CancellationToken cancellationToken)
+        public async Task<WrapperResult> Handle(WithdrawMoneyCommand request, CancellationToken cancellationToken)
         {
-            Account? model = await _context.Accounts.FirstOrDefaultAsync(m => m.UID == request.UID, cancellationToken);
+            Account? model = await _context.Accounts.FirstOrDefaultAsync(m => m.UID == request.DataWithdraw.AccountId, cancellationToken);
             if (model == null)
             {
-                return WrapperResult.Build(1, ReferencesTextResponse.AccountNotFound, new NotFoundException(nameof(Account), request.UID));
+                return WrapperResult.Build(1, ReferencesTextResponse.AccountNotFound, new NotFoundException(nameof(Account), request.DataWithdraw.AccountId));
             }
             try
             {
                 await _putAndWithdrawService.WithdrawAsync
                     (
                         PutAndWithdrawServiceModel.Build(model.TypeAccount.Name, model.CountMonetaryUnit, model.Procent),
-                        request.Sum, cancellationToken
+                        request.DataWithdraw.Sum, cancellationToken
                     );
             }
             catch (Exception ex)

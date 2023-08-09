@@ -15,7 +15,6 @@ namespace Persistence
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
-
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -24,6 +23,11 @@ namespace Persistence
             modelBuilder.ApplyConfiguration(new AccountConfiguration());
             modelBuilder.ApplyConfiguration(new CustomerConfiguration());
             modelBuilder.ApplyConfiguration(new TypeAccountConfiguraton());
+
+            modelBuilder.Entity<Account>().Property(m => m.UID).HasConversion(g => g.ToString(), s => new Guid(s));
+            modelBuilder.Entity<Customer>().Property(m => m.UID).HasConversion(g => g.ToString(), s => new Guid(s));
+            modelBuilder.Entity<TypeAccount>().Property(m => m.UID).HasConversion(g => g.ToString(), s => new Guid(s));
+
         }
     }
 }

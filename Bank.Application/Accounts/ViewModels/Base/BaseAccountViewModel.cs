@@ -20,7 +20,7 @@
         /// <summary>
         /// Дата открытия счета
         /// </summary>
-        public long DateOpen { get; init; }
+        public DateTime DateOpen { get; init; }
         /// <summary>
         /// Идентификатор типа аккаутна
         /// </summary>

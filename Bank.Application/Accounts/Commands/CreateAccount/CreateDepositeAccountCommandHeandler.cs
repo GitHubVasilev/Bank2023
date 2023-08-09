@@ -7,7 +7,7 @@ using MediatR;
 
 namespace Bank.Application.Accounts.Commands.CreateAccount
 {
-    public record CreateDepositeAccountCommand(DepositeAccountPostViewModel viewModel) : IRequest<WrapperResult>;
+    public record CreateDepositeAccountCommand(DepositeAccountPostViewModel ViewModel) : IRequest<WrapperResult>;
 
     public class CreateDepositeAccountCommandHeandler : IRequestHandler<CreateDepositeAccountCommand, WrapperResult>
     {
@@ -22,8 +22,9 @@ namespace Bank.Application.Accounts.Commands.CreateAccount
 
         public async Task<WrapperResult> Handle(CreateDepositeAccountCommand request, CancellationToken cancellationToken)
         {
-            Account model = _mapper.Map<DepositeAccountPostViewModel, Account>(request.viewModel);
+            Account model = _mapper.Map<DepositeAccountPostViewModel, Account>(request.ViewModel);
             await _context.Accounts.AddAsync(model, cancellationToken);
+            await _context.SaveChangesAsync(cancellationToken);
             return WrapperResult.Build(0);
         }
     }

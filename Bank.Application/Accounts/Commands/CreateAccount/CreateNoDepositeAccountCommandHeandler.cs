@@ -24,6 +24,7 @@ namespace Bank.Application.Accounts.Commands.CreateAccount
         {
             Account model = _mapper.Map<NoDepositeAccountPostViewModel, Account>(request.viewModel);
             await _context.Accounts.AddAsync(model, cancellationToken);
+            await _context.SaveChangesAsync(cancellationToken);
             return WrapperResult.Build(0);
         }
     }

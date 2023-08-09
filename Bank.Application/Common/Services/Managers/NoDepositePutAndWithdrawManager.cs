@@ -1,8 +1,8 @@
-﻿using Bank.Application.Accounts.Services.ServiceModels;
+﻿using Bank.Application.Common.Services.ServiceModels;
 using Bank.Application.Interfaces.Accounts;
 using Bank.Domain.Base;
 
-namespace Bank.Application.Accounts.Managers
+namespace Bank.Application.Common.Services.Managers
 {
     internal class NoDepositePutAndWithdrawManager : IPutAndWithdrawManager
     {
@@ -13,7 +13,7 @@ namespace Bank.Application.Accounts.Managers
             {
                 model.StartSum += sum;
             }
-            else if (NextManager is not null) 
+            else if (NextManager is not null)
             {
                 model = NextManager.Put(model, sum);
             }

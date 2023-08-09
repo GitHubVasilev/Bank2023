@@ -1,26 +1,24 @@
-﻿using Bank.Application.Accounts.Services.ServiceModels;
-using Bank.Application.Common.Exceptions;
+﻿using Bank.Application.Common.Exceptions;
+using Bank.Application.Common.Services.ServiceModels;
 using Bank.Application.Interfaces;
 using Bank.Application.Interfaces.Accounts;
 using Bank.Domain;
 using Microsoft.EntityFrameworkCore;
 
-namespace Bank.Application.Accounts.Services
+namespace Bank.Application.Common.Services
 {
     public class PutAndWithdrawService : IPutAndWithdrawService
     {
         private IPutAndWithdrawManager? _startManagment;
         private IPutAndWithdrawManager? _currentManegment;
-        private readonly IApplicationDbContext _context;
 
         public PutAndWithdrawService()
         {
-
         }
 
         public void AddManager(IPutAndWithdrawManager manager)
         {
-            if (_startManagment is null) 
+            if (_startManagment is null)
             {
                 _startManagment = manager;
                 _currentManegment = manager;

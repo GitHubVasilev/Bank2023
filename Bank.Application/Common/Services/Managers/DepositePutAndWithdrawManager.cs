@@ -1,8 +1,8 @@
-﻿using Bank.Application.Accounts.Services.ServiceModels;
+﻿using Bank.Application.Common.Services.ServiceModels;
 using Bank.Application.Interfaces.Accounts;
 using Bank.Domain.Base;
 
-namespace Bank.Application.Accounts.Managers
+namespace Bank.Application.Common.Services.Managers
 {
     internal class DepositePutAndWithdrawManager : IPutAndWithdrawManager
     {
@@ -10,12 +10,12 @@ namespace Bank.Application.Accounts.Managers
 
         public PutAndWithdrawServiceModel Put(PutAndWithdrawServiceModel serviceModel, decimal sum)
         {
-            if (serviceModel.TypeAccount == AppData.DepositeAccountTypeName) 
+            if (serviceModel.TypeAccount == AppData.DepositeAccountTypeName)
             {
                 sum *= 1 + serviceModel.Procent / 100;
                 serviceModel.StartSum += sum;
             }
-            else if (NextManager is not null) 
+            else if (NextManager is not null)
             {
                 serviceModel = NextManager.Put(serviceModel, sum);
             }
@@ -32,7 +32,7 @@ namespace Bank.Application.Accounts.Managers
                 }
                 serviceModel.StartSum -= sum;
             }
-            else if (NextManager is not null) 
+            else if (NextManager is not null)
             {
                 serviceModel = NextManager.Withdraw(serviceModel, sum);
             }

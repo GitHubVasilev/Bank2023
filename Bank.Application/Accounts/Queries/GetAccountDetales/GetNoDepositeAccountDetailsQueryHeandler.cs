@@ -1,31 +1,31 @@
 ﻿using AutoMapper;
-using Bank.Application.Accounts.ViewModels.Accounts;
-using Bank.Application.Common;
 using Bank.Application.Common.Exceptions;
+using Bank.Application.Common;
 using Bank.Application.Interfaces;
 using Bank.Domain;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Bank.Application.Accounts.ViewModels.NoDepositeAccounts;
 
 namespace Bank.Application.Accounts.Queries.GetAccountDetales
 {
-    public record GetAccountDetailsQuery(Guid UID) : IRequest<WrapperResult<AccountDetailsViewModel>>;
+    public record GetNoDepositeAccountDetailsQuery(Guid UID) : IRequest<WrapperResult<NoDepositeAccountViewModel>>;
 
-    public class GetAccountDetailsQueryHeandler : IRequestHandler<GetAccountDetailsQuery, WrapperResult<AccountDetailsViewModel>>
+    public class GetNoDepositeAccountDetailsQueryHeandler : IRequestHandler<GetNoDepositeAccountDetailsQuery, WrapperResult<NoDepositeAccountViewModel>>
     {
         private readonly IMapper _mapper;
         private readonly IApplicationDbContext _context;
 
-        public GetAccountDetailsQueryHeandler(IApplicationDbContext dbContext,
+        public GetNoDepositeAccountDetailsQueryHeandler(IApplicationDbContext dbContext,
             IMapper mapper)
         {
             _context = dbContext;
             _mapper = mapper;
         }
 
-        public async Task<WrapperResult<AccountDetailsViewModel>> Handle(GetAccountDetailsQuery request, CancellationToken cancellationToken)
+        public async Task<WrapperResult<NoDepositeAccountViewModel>> Handle(GetNoDepositeAccountDetailsQuery request, CancellationToken cancellationToken)
         {
-            WrapperResult<AccountDetailsViewModel> wrapperResult = WrapperResult.Build<AccountDetailsViewModel>();
+            WrapperResult<NoDepositeAccountViewModel> wrapperResult = WrapperResult.Build<NoDepositeAccountViewModel>();
             Account? model = await _context.Accounts.FirstOrDefaultAsync(m => m.UID == request.UID, cancellationToken);
 
             if (model == null)
@@ -35,7 +35,7 @@ namespace Bank.Application.Accounts.Queries.GetAccountDetales
                 return wrapperResult;
             }
 
-            wrapperResult.Result = _mapper.Map<AccountDetailsViewModel>(model);
+            wrapperResult.Result = _mapper.Map<NoDepositeAccountViewModel>(model);
             return wrapperResult;
         }
     }
