@@ -3,19 +3,19 @@
     public abstract class WrapperResult
     {
         public string? Message { get; set; }
-        public Exception? ExceptionObject { get; set; }
+        public List<Exception> ExceptionObjects { get; set; } = new List<Exception>();
         public bool IsSuccess
         {
-            get => ExceptionObject is null;
+            get => ExceptionObjects is null;
         }
 
-        public static WrapperResult Build<T>(T result, string? message = null, Exception? error = null)
+        public static WrapperResult Build<T>(T result, string? message = null, List<Exception>? error = null)
         {
             return new WrapperResult<T>
             {
                 Result = result,
                 Message = message,
-                ExceptionObject = error,
+                ExceptionObjects = error ?? new List<Exception>(),
             };
         }
 
@@ -23,7 +23,7 @@
         {
             return new WrapperResult<T>
             {
-                Result = default(T),
+                Result = default,
             };
         }
     }

@@ -28,7 +28,7 @@ namespace Bank.Application.TypesAccount.Queries.TypeAccountDetail
             TypeAccount? model = await _context.TypesAccount.FirstOrDefaultAsync(m => m.UID == request.Id, cancellationToken);
             if (model == null) 
             {
-                wrapperResult.ExceptionObject = new NotFoundException(nameof(TypeAccount), request.Id);
+                wrapperResult.ExceptionObjects.Add(new NotFoundException(nameof(TypeAccount), request.Id));
                 wrapperResult.Message = ReferencesTextResponse.TypeAccountNotFound;
             }
             wrapperResult.Result = _mapper.Map<TypeAccountGetViewModel>(model);

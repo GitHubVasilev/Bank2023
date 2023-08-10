@@ -7,6 +7,7 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Bank.Application.Common.Services.ServiceModels;
 using Bank.Application.Transaction.ViewModels;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Bank.Application.Transaction.Commands
 {
@@ -25,15 +26,20 @@ namespace Bank.Application.Transaction.Commands
 
         public async Task<WrapperResult> Handle(TrancactionMoneyCommand request, CancellationToken cancellationToken)
         {
+            WrapperResult result = WrapperResult.Build<int>();
             Account? modelFrom = await _context.Accounts.FirstOrDefaultAsync(m => m.UID == request.DataTransaction.AccountFrom, cancellationToken);
             if (modelFrom == null)
             {
-                return WrapperResult.Build(1, ReferencesTextResponse.AccountNotFound, new NotFoundException(nameof(Account), request.DataTransaction.AccountFrom));
+                result.Message = ReferencesTextResponse.AccountNotFound;
+                result.ExceptionObjects.Add(new NotFoundException(nameof(Account), request.DataTransaction.AccountFrom));
+                return result;
             }
             Account? modelTo = await _context.Accounts.FirstOrDefaultAsync(m => m.UID == request.DataTransaction.AccountFrom, cancellationToken);
             if (modelTo == null)
             {
-                return WrapperResult.Build(1, ReferencesTextResponse.AccountNotFound, new NotFoundException(nameof(Account), request.DataTransaction.AccountTo));
+                result.Message = ReferencesTextResponse.AccountNotFound;
+                result.ExceptionObjects.Add(new NotFoundException(nameof(Account), request.DataTransaction.AccountTo));
+                return result;
             }
             PutAndWithdrawServiceModel serviceModelFrom = await _putAndWithdrawService.WithdrawAsync
                 (
@@ -53,7 +59,7 @@ namespace Bank.Application.Transaction.Commands
             _context.Accounts.Update(modelTo);
             await _context.SaveChangesAsync(cancellationToken);
 
-            return WrapperResult.Build(0);
+            return result;
         }
     }
 }
