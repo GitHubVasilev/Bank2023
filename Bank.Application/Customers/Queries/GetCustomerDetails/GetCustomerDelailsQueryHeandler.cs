@@ -35,7 +35,7 @@ namespace Bank.Application.Customers.Queries.GetCustomerDetails
 
             if (model is null) 
             {
-                wrapperResult.ExceptionObject = new NotFoundException(nameof(Customer), request.UID);
+                wrapperResult.ExceptionObjects.Add(new NotFoundException(nameof(Customer), request.UID));
                 wrapperResult.Message = ReferencesTextResponse.CustometNotFound;
                 return wrapperResult;
             }

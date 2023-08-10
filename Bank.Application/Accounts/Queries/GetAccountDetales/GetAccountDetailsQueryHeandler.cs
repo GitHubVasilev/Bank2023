@@ -30,7 +30,7 @@ namespace Bank.Application.Accounts.Queries.GetAccountDetales
 
             if (model == null)
             {
-                wrapperResult.ExceptionObject = new NotFoundException(nameof(Account), request.UID);
+                wrapperResult.ExceptionObjects.Add( new NotFoundException(nameof(Account), request.UID));
                 wrapperResult.Message = ReferencesTextResponse.AccountNotFound;
                 return wrapperResult;
             }

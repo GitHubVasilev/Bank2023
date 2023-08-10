@@ -27,7 +27,7 @@ namespace Bank.Application.Customers.Commands.CreateCustomer
         {
             if (await _context.Customers.AnyAsync(m => m.UID == request.ViewModel.Id)) 
             {
-                return WrapperResult.Build<int>(1, ReferencesTextResponse.CustomerExists ,new ExistingEntityException(nameof(Customer), request.ViewModel.Id));
+                return WrapperResult.Build(1, ReferencesTextResponse.CustomerExists, new List<Exception>() { new ExistingEntityException(nameof(Customer), request.ViewModel.Id) });
             }
             Customer customer = _mapper
                 .Map<Customer>(request.ViewModel, opt => opt.Items[nameof(ApplicationUser)] = request.User?.Identity?.Name);

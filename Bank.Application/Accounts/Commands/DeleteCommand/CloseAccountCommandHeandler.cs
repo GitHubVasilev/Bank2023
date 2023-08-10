@@ -23,7 +23,7 @@ namespace Bank.Application.Accounts.Commands.DeleteCommand
 
             if (model == null)
             {
-                return WrapperResult.Build<int>(1, ReferencesTextResponse.AccountNotFound, new NotFoundException(nameof(Account), request.UID));
+                return WrapperResult.Build<int>(1, ReferencesTextResponse.AccountNotFound, new List<Exception>{ new NotFoundException(nameof(Account), request.UID) });
             }
 
             model.IsClose = true;

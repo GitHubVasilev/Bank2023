@@ -19,15 +19,18 @@ namespace Bank.Application.Customers.Commands.DeleteCustomer
 
         public async Task<WrapperResult> Handle(DeleteCustomerCommand request, CancellationToken cancellationToken)
         {
+            WrapperResult result = WrapperResult.Build<int>();
             Customer? model = await _context.Customers.FirstOrDefaultAsync(m => m.UID == request.Id);
 
             if (model is null) 
             {
-                return WrapperResult.Build(1, ReferencesTextResponse.CustometNotFound, new NotFoundException(nameof(Customer), request.Id));
+                result.Message = ReferencesTextResponse.CustometNotFound;
+                result.ExceptionObjects.Add(new NotFoundException(nameof(Customer), request.Id));
+                return result;
             }
 
             _context.Customers.Remove(model);
-            return WrapperResult.Build(0);
+            return result;
         }
     }
 }

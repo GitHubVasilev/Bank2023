@@ -25,10 +25,13 @@ namespace Bank.Application.PutAndWithdraw.Commands
 
         public async Task<WrapperResult> Handle(PutMoneyCommand request, CancellationToken cancellationToken)
         {
+            WrapperResult result = WrapperResult.Build<int>();
             Account? model = await _context.Accounts.FirstOrDefaultAsync(m => m.UID == request.DataPut.AccountId, cancellationToken);
             if (model == null)
             {
-                return WrapperResult.Build(1, ReferencesTextResponse.AccountNotFound, new NotFoundException(nameof(Account), request.DataPut.AccountId));
+                result.ExceptionObjects.Add(new NotFoundException(nameof(Account), request.DataPut.AccountId));
+                result.Message = ReferencesTextResponse.AccountNotFound;
+                return result;
             }
             try
             {
@@ -40,13 +43,15 @@ namespace Bank.Application.PutAndWithdraw.Commands
             }
             catch (Exception ex)
             {
-                return WrapperResult.Build(1, ReferencesTextResponse.InnerException, ex);
+                result.Message = ReferencesTextResponse.InnerException;
+                result.ExceptionObjects.Add(ex);
+                return result;
             }
 
             _context.Accounts.Update(model);
             await _context.SaveChangesAsync(cancellationToken);
 
-            return WrapperResult.Build(0);
+            return result;
         }
     }
 }

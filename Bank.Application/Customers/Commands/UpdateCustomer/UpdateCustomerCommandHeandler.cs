@@ -29,16 +29,20 @@ namespace Bank.Application.Customers.Commands.UpdateCustomer
 
         public async Task<WrapperResult> Handle(UpdateCustomerCommand request, CancellationToken cancellationToken)
         {
+            WrapperResult result = WrapperResult.Build<int>();
             Customer? model = _context.Customers.FirstOrDefault(m => m.UID == request.ViewModel.Id);
             if (model is null) 
             {
-                return WrapperResult.Build(1, ReferencesTextResponse.CustometNotFound, new NotFoundException(nameof(Customer), request.ViewModel.Id));
+                result.ExceptionObjects.Add(new NotFoundException(nameof(Customer), request.ViewModel.Id));
+                result.Message = ReferencesTextResponse.CustometNotFound;
+                return result;
             }
 
             ValidationResult<CustomerPutUpdateViewModel> validationResult = _validator.Validate(request.ViewModel, request.User);
             if (!validationResult.IsValid)
             {
-                return WrapperResult.Build<int>(1, string.Join(';', validationResult.Description), new InvalidModelException(nameof(CustomerGetViewModel), model.UID));
+                result.Message = string.Join(';', validationResult.Description);
+                result.ExceptionObjects.Add(new InvalidModelException(nameof(CustomerGetViewModel), model.UID));
             }
 
             model.FirstName = request.ViewModel.FirstName;
@@ -48,7 +52,7 @@ namespace Bank.Application.Customers.Commands.UpdateCustomer
             model.Passport = request.ViewModel.Passport;
             
             await _context.SaveChangesAsync(cancellationToken);
-            return WrapperResult.Build<int>();
+            return result;
         }
     }
 }

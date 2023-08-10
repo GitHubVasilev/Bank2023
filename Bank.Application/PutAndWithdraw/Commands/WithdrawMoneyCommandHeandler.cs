@@ -28,7 +28,7 @@ namespace Bank.Application.PutAndWithdraw.Commands
             Account? model = await _context.Accounts.FirstOrDefaultAsync(m => m.UID == request.DataWithdraw.AccountId, cancellationToken);
             if (model == null)
             {
-                return WrapperResult.Build(1, ReferencesTextResponse.AccountNotFound, new NotFoundException(nameof(Account), request.DataWithdraw.AccountId));
+                return WrapperResult.Build(1, ReferencesTextResponse.AccountNotFound, new List<Exception>() { new NotFoundException(nameof(Account), request.DataWithdraw.AccountId) });
             }
             try
             {
@@ -40,7 +40,7 @@ namespace Bank.Application.PutAndWithdraw.Commands
             }
             catch (Exception ex)
             {
-                return WrapperResult.Build(1, ReferencesTextResponse.InnerException, ex);
+                return WrapperResult.Build(1, ReferencesTextResponse.InnerException, new List<Exception> { ex });
             }
 
             _context.Accounts.Update(model);
