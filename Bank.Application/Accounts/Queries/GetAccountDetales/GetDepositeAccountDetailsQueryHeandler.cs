@@ -7,6 +7,7 @@ using Bank.Domain;
 using MediatR;
 using Bank.Application.Accounts.ViewModels.DepositeAccounts;
 using Microsoft.EntityFrameworkCore;
+using Bank.Application.Common.AppConfig;
 
 namespace Bank.Application.Accounts.Queries.GetAccountDetales
 {

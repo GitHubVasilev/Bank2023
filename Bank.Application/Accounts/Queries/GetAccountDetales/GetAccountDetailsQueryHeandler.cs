@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Bank.Application.Accounts.ViewModels.Accounts;
 using Bank.Application.Common;
+using Bank.Application.Common.AppConfig;
 using Bank.Application.Common.Exceptions;
 using Bank.Application.Interfaces;
 using Bank.Domain;

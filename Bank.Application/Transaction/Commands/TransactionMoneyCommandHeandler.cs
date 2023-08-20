@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Bank.Application.Common.Services.ServiceModels;
 using Bank.Application.Transaction.ViewModels;
 using System.Diagnostics.CodeAnalysis;
+using Bank.Application.Common.AppConfig;
 
 namespace Bank.Application.Transaction.Commands
 {

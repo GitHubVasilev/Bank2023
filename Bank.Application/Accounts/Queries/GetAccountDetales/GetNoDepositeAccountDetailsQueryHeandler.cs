@@ -6,6 +6,7 @@ using Bank.Domain;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Bank.Application.Accounts.ViewModels.NoDepositeAccounts;
+using Bank.Application.Common.AppConfig;
 
 namespace Bank.Application.Accounts.Queries.GetAccountDetales
 {

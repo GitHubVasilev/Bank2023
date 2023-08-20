@@ -8,15 +8,10 @@ namespace Bank.Application.Customers.ViewModels
     {
         public Guid Id { get; set; }
         public string FirstName { get; set; } = null!;
-        public bool FirstNameIsChanged { get; set; }
         public string LastName { get; set; } = null!;
-        public bool LastNameIsChanged { get; set; }
         public string? Patronymic { get; set; }
-        public bool PatronymicIsChanged { get; set; }
         public string? Telephone { get; set; }
-        public bool TelephoneIsChanged { get; set; }
         public string? Passport { get; set; }
-        public bool PassportIsChanged { get; set; }
 
         public void Mapping(Profile profile)
         {
