@@ -28,7 +28,7 @@ namespace Bank.WebApi.Controllers
         }
 
         [HttpPost("[action]")]
-        public async Task<ActionResult<WrapperResult>> Create([FromBody] CustomerPostCreateViewModel viewModel)
+        public async Task<ActionResult<WrapperResult<int>>> Create([FromBody] CustomerPostCreateViewModel viewModel)
         {
             return Ok(await Mediator.Send
                 (
@@ -37,7 +37,7 @@ namespace Bank.WebApi.Controllers
         }
 
         [HttpPut("[action]")]
-        public async Task<ActionResult<WrapperResult>> Update([FromBody] CustomerPutUpdateViewModel viewModel)
+        public async Task<ActionResult<WrapperResult<int>>> Update([FromBody] CustomerPutUpdateViewModel viewModel)
         { 
             return Ok(await Mediator.Send
                 (
@@ -46,7 +46,7 @@ namespace Bank.WebApi.Controllers
         }
 
         [HttpDelete("[action]/{customerId}")]
-        public async Task<ActionResult<WrapperResult>> Delete(Guid customerId) 
+        public async Task<ActionResult<WrapperResult<int>>> Delete(Guid customerId) 
         {
             return Ok(await Mediator.Send
                 (

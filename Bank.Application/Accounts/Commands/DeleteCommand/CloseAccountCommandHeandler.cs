@@ -1,4 +1,5 @@
 ﻿using Bank.Application.Common;
+using Bank.Application.Common.AppConfig;
 using Bank.Application.Common.Exceptions;
 using Bank.Application.Interfaces;
 using Bank.Domain;

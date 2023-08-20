@@ -25,7 +25,8 @@ namespace Bank.Application.Customers.ViewModels
                 .ForMember(m => m.UpdatedAt, opt => opt.Ignore())
                 .ForMember(m => m.UpdatedBy, opt => opt.Ignore())
                 .ForMember(m => m.CreatedAt, opt => opt.MapFrom(m => DateTime.UtcNow))
-                .ForMember(m => m.CreatedBy, opt => opt.MapFrom((_, _, _, context) => context.Items[nameof(ApplicationUser)]));
+                //.ForMember(m => m.CreatedBy, opt => opt.MapFrom((_, _, _, context) => context.Items[nameof(ApplicationUser)]));
+                .ForMember(m => m.CreatedBy, opt => opt.MapFrom(m => "SuperAdmin"));
         }
     }
 }

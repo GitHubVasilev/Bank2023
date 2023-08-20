@@ -10,9 +10,9 @@ using System.Security.Claims;
 
 namespace Bank.Application.Customers.Commands.CreateCustomer
 {
-    public record CreateCustomerCommand(CustomerPostCreateViewModel ViewModel, ClaimsPrincipal User) : IRequest<WrapperResult>;
+    public record CreateCustomerCommand(CustomerPostCreateViewModel ViewModel, ClaimsPrincipal User) : IRequest<WrapperResult<int>>;
 
-    public class CreateCustomerCommandHeandler : IRequestHandler<CreateCustomerCommand, WrapperResult>
+    public class CreateCustomerCommandHeandler : IRequestHandler<CreateCustomerCommand, WrapperResult<int>>
     {
         private readonly IApplicationDbContext _context;
         private readonly IMapper _mapper;
@@ -23,9 +23,9 @@ namespace Bank.Application.Customers.Commands.CreateCustomer
             _mapper = mapper;
         }
 
-        public async Task<WrapperResult> Handle(CreateCustomerCommand request, CancellationToken cancellationToken)
+        public async Task<WrapperResult<int>> Handle(CreateCustomerCommand request, CancellationToken cancellationToken)
         {
-            if (await _context.Customers.AnyAsync(m => m.UID == request.ViewModel.Id)) 
+            if (await _context.Customers.AnyAsync(m => m.UID == request.ViewModel.Id, cancellationToken)) 
             {
                 return WrapperResult.Build(1, ReferencesTextResponse.CustomerExists, new List<Exception>() { new ExistingEntityException(nameof(Customer), request.ViewModel.Id) });
             }

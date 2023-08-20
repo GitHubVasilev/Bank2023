@@ -11,13 +11,6 @@ namespace Bank.Application.Customers.Behaviors
 
         public ValidatorBehavior(IEnumerable<IValidator<TRequest>> validators) => _validators = validators;
 
-        /// <summary>
-        /// Pipeline handler. Perform any additional behavior and await the <paramref name="next" /> delegate as necessary
-        /// </summary>
-        /// <param name="request">Incoming request</param>
-        /// <param name="cancellationToken">Cancellation token</param>
-        /// <param name="next">Awaitable delegate for the next action in the pipeline. Eventually this delegate represents the handler.</param>
-        /// <returns>Awaitable task returning the <typeparamref name="TResponse" /></returns>
         public Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
         {
             var failures = _validators

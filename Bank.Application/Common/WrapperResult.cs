@@ -9,7 +9,7 @@
             get => ExceptionObjects is null;
         }
 
-        public static WrapperResult Build<T>(T result, string? message = null, List<Exception>? error = null)
+        public static WrapperResult<T> Build<T>(T result, string? message = null, List<Exception>? error = null)
         {
             return new WrapperResult<T>
             {
